@@ -19,65 +19,11 @@
             margin: 0;
         }
 
-        @media print {
-            html, body {
-                width: 80mm;
-                height: 50mm;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                overflow: hidden !important;
-            }
-            body * {
-                visibility: hidden !important;
-            }
-            #print-section, #print-section * {
-                visibility: visible !important;
-            }
-            #print-section {
-                position: fixed !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 80mm !important;
-                height: 50mm !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: white !important;
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .label-item {
-                width: 80mm !important;
-                height: 50mm !important;
-                max-width: 80mm !important;
-                max-height: 50mm !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-                border: none !important;
-                margin: 0 !important;
-                padding: 2mm 3mm !important;
-                text-align: center;
-                background: white !important;
-                border-radius: 0 !important;
-                box-sizing: border-box !important;
-                display: flex !important;
-                flex-direction: column !important;
-                justify-content: center !important;
-                align-items: center !important;
-                overflow: hidden !important;
-            }
-            .label-item svg {
-                width: 65mm !important;
-                max-width: 65mm !important;
-                height: 18mm !important;
-                max-height: 18mm !important;
-            }
+        .label-item {
+            width: 100%;
+            max-width: 80mm;
+            height: 50mm;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -91,7 +37,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold tracking-tight">ระบบรันเลขและพิมพ์บาร์โค้ด Pallet (Cloud Sync)</h1>
-                    <p class="text-xs text-blue-200">ซิงค์ข้อมูลเรียลไทม์ • ขนาดลาเบล 80x50mm</p>
+                    <p class="text-xs text-blue-200">ซิงค์ข้อมูลเรียลไทม์ • รองรับการพิมพ์ใน Google Sites</p>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
@@ -111,13 +57,13 @@
             <!-- Print Tips Card -->
             <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-900 text-xs shadow-sm">
                 <h4 class="font-bold flex items-center mb-1 text-amber-900 text-sm">
-                    <i class="fa-solid fa-circle-info mr-1.5 text-amber-600"></i> คำแนะนำก่อนกดพิมพ์จริง
+                    <i class="fa-solid fa-circle-info mr-1.5 text-amber-600"></i> คำแนะนำการพิมพ์บน Google Sites
                 </h4>
-                <p class="mb-1">ในหน้าต่าง Print Preview ของเครื่องพิมพ์:</p>
+                <p class="mb-1">ระบบใช้หน้าต่างพิมพ์พิเศษเพื่อรองรับ Iframe:</p>
                 <ul class="list-disc pl-4 space-y-0.5 text-amber-800">
                     <li><b>Paper Size (ขนาดกระดาษ):</b> เลือก 80mm x 50mm</li>
                     <li><b>Margins (ระยะขอบ):</b> เลือก <b>None (ไม่มี)</b></li>
-                    <li><b>Headers/Footers:</b> ยกเลิกการเลือก</li>
+                    <li>หากหน้าต่างพิมพ์ไม่ขึ้น ให้ตรวจสอบการบล็อก Pop-up ของเบราว์เซอร์</li>
                 </ul>
             </div>
 
@@ -198,7 +144,7 @@
                 <div class="grid grid-cols-2 gap-2">
                     <button id="btn-print-all" type="button" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-medium py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-1.5">
                         <i class="fa-solid fa-print"></i>
-                        <span>พิมพ์ล่าสุด</span>
+                        <span>พิมพ์ทั้งหมด</span>
                     </button>
                     <button id="btn-clear-history" type="button" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs font-medium py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-1.5 border border-red-200">
                         <i class="fa-solid fa-trash-can"></i>
@@ -300,14 +246,14 @@
         // ค่า Firebase Config ของคุณ
         // =========================================================================
         const firebaseConfig = {
-  apiKey: "AIzaSyBJszkGKbDxZfmgs99_UHKLl4dkpDj69VM",
-  authDomain: "pallet-barcode-system.firebaseapp.com",
-  projectId: "pallet-barcode-system",
-  storageBucket: "pallet-barcode-system.firebasestorage.app",
-  messagingSenderId: "184002341936",
-  appId: "1:184002341936:web:6fae5f3f9c90a7559b91f5",
-  measurementId: "G-2E38FSLTDS"
-};
+            apiKey: "AIzaSyBJszkGKbDxZfmgs99_UHKLl4dkpDj69VM",
+            authDomain: "pallet-barcode-system.firebaseapp.com",
+            projectId: "pallet-barcode-system",
+            storageBucket: "pallet-barcode-system.firebasestorage.app",
+            messagingSenderId: "184002341936",
+            appId: "1:184002341936:web:6fae5f3f9c90a7559b91f5",
+            measurementId: "G-2E38FSLTDS"
+        };
 
         const appId = 'pallet-barcode-system-v1';
 
@@ -409,7 +355,7 @@
 
             itemsToRender.forEach((item, index) => {
                 const labelCard = document.createElement('div');
-                labelCard.className = 'label-item bg-white border border-slate-300 rounded-xl p-3 flex flex-col items-center justify-center shadow-sm relative group w-full';
+                labelCard.className = 'label-item bg-white border border-slate-300 rounded-xl p-3 flex flex-col items-center justify-center shadow-sm relative group mx-auto';
                 
                 labelCard.innerHTML = `
                     <div class="absolute top-1 right-2 text-[9px] text-slate-400 no-print">#${index + 1} (80x50mm)</div>
@@ -439,6 +385,121 @@
                 }
             });
         }
+
+        // Dedicated Print Popup Engine to bypass Google Sites Iframe restrictions
+        window.triggerPrintPopup = function(itemsToPrint) {
+            if (!itemsToPrint || itemsToPrint.length === 0) {
+                showToast('ไม่มีรายการสำหรับพิมพ์', 'error');
+                return;
+            }
+
+            const printWin = window.open('', '_blank', 'width=500,height=700');
+            if (!printWin) {
+                showToast('เบราว์เซอร์บล็อกหน้าต่าง Pop-up กรุณาอนุญาต Pop-up บน Google Sites', 'error');
+                return;
+            }
+
+            let htmlContent = `
+                <!DOCTYPE html>
+                <html lang="th">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>พิมพ์บาร์โค้ด Pallet (80x50mm)</title>
+                    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"><\/script>
+                    <style>
+                        @page {
+                            size: 80mm 50mm;
+                            margin: 0;
+                        }
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            background: white;
+                            font-family: 'Prompt', sans-serif;
+                        }
+                        .label-item {
+                            width: 80mm;
+                            height: 50mm;
+                            max-width: 80mm;
+                            max-height: 50mm;
+                            page-break-after: always;
+                            break-after: page;
+                            box-sizing: border-box;
+                            padding: 2mm 3mm;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            text-align: center;
+                            overflow: hidden;
+                            background: white;
+                        }
+                        .label-item:last-child {
+                            page-break-after: avoid;
+                            break-after: avoid;
+                        }
+                        svg {
+                            width: 65mm !important;
+                            max-width: 65mm !important;
+                            height: 18mm !important;
+                            max-height: 18mm !important;
+                        }
+                        .code-text {
+                            font-size: 20px;
+                            font-weight: bold;
+                            font-family: monospace;
+                            margin-top: 2px;
+                            color: #000;
+                        }
+                        .time-text {
+                            font-size: 11px;
+                            font-family: monospace;
+                            color: #333;
+                            margin-top: 2px;
+                        }
+                    </style>
+                </head>
+                <body>
+            `;
+
+            itemsToPrint.forEach((item, idx) => {
+                htmlContent += `
+                    <div class="label-item">
+                        <svg class="barcode-svg" data-code="${item.code}"></svg>
+                        <div class="code-text">${item.code}</div>
+                        <div class="time-text">${item.timestamp}</div>
+                    </div>
+                `;
+            });
+
+            htmlContent += `
+                    <script>
+                        window.onload = function() {
+                            document.querySelectorAll('.barcode-svg').forEach(svg => {
+                                const codeText = svg.getAttribute('data-code');
+                                try {
+                                    JsBarcode(svg, codeText, {
+                                        format: "CODE128",
+                                        width: 1.2,
+                                        height: 32,
+                                        displayValue: false,
+                                        margin: 1
+                                    });
+                                } catch(e) {}
+                            });
+                            setTimeout(() => {
+                                window.print();
+                            }, 400);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `;
+
+            printWin.document.open();
+            printWin.document.write(htmlContent);
+            printWin.document.close();
+        };
 
         function renderHistoryTable() {
             const searchTerm = searchHistoryInput.value.toLowerCase();
@@ -676,15 +737,16 @@
         });
 
         btnPrintSelected.addEventListener('click', function() {
-            if (history.length === 0 && lastGeneratedBatch.length === 0) {
-                showToast('ไม่มีรายการสำหรับพิมพ์', 'error');
-                return;
-            }
             if (lastGeneratedBatch.length === 0) {
-                lastGeneratedBatch = [history[history.length - 1]];
+                if (history.length > 0) {
+                    const sorted = [...history].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+                    lastGeneratedBatch = [sorted[0]];
+                } else {
+                    showToast('ไม่มีรายการสำหรับพิมพ์', 'error');
+                    return;
+                }
             }
-            renderPreview([lastGeneratedBatch[lastGeneratedBatch.length - 1]]);
-            setTimeout(() => window.print(), 300);
+            triggerPrintPopup(lastGeneratedBatch);
         });
 
         btnPrintAll.addEventListener('click', function() {
@@ -693,15 +755,13 @@
                 return;
             }
             const sorted = [...history].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-            renderPreview([sorted[0]]);
-            setTimeout(() => window.print(), 300);
+            triggerPrintPopup(sorted);
         });
 
         window.printSingleLabel = function(code) {
             const item = history.find(h => h.code === code);
             if (item) {
-                renderPreview([item]);
-                setTimeout(() => window.print(), 300);
+                triggerPrintPopup([item]);
             }
         };
 
