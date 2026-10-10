@@ -31,21 +31,23 @@
                 overflow: hidden !important;
             }
             body * {
-                visibility: hidden;
+                visibility: hidden !important;
             }
             #print-section, #print-section * {
-                visibility: visible;
+                visibility: visible !important;
             }
             #print-section {
-                position: absolute;
-                left: 0;
-                top: 0;
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
                 width: 80mm !important;
                 height: 50mm !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 background: white !important;
-                display: block !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
             }
             .no-print {
                 display: none !important;
@@ -57,11 +59,9 @@
                 max-height: 50mm !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
-                page-break-after: avoid !important;
-                break-after: avoid !important;
                 border: none !important;
                 margin: 0 !important;
-                padding: 1mm 2mm !important;
+                padding: 2mm 3mm !important;
                 text-align: center;
                 background: white !important;
                 border-radius: 0 !important;
@@ -72,14 +72,11 @@
                 align-items: center !important;
                 overflow: hidden !important;
             }
-            .label-item:not(:first-child) {
-                display: none !important;
-            }
             .label-item svg {
-                width: 46mm !important;
-                max-width: 46mm !important;
-                height: 12mm !important;
-                max-height: 12mm !important;
+                width: 65mm !important;
+                max-width: 65mm !important;
+                height: 18mm !important;
+                max-height: 18mm !important;
             }
         }
     </style>
@@ -94,7 +91,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold tracking-tight">ระบบรันเลขและพิมพ์บาร์โค้ด Pallet (Cloud Sync)</h1>
-                    <p class="text-xs text-blue-200">ซิงค์ข้อมูลเรียลไทม์ข้ามทุกอุปกรณ์ • ขนาดลาเบล 80x50mm</p>
+                    <p class="text-xs text-blue-200">ซิงค์ข้อมูลเรียลไทม์ • ขนาดลาเบล 80x50mm</p>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
@@ -201,11 +198,11 @@
                 <div class="grid grid-cols-2 gap-2">
                     <button id="btn-print-all" type="button" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-medium py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-1.5">
                         <i class="fa-solid fa-print"></i>
-                        <span>พิมพ์ทั้งหมด</span>
+                        <span>พิมพ์ล่าสุด</span>
                     </button>
                     <button id="btn-clear-history" type="button" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs font-medium py-2.5 px-3 rounded-xl transition-all flex items-center justify-center space-x-1.5 border border-red-200">
                         <i class="fa-solid fa-trash-can"></i>
-                        <span>ล้างประวัติทั้งหมด</span>
+                        <span>ล้างประวัติ</span>
                     </button>
                 </div>
             </div>
@@ -218,13 +215,13 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-3 border-b border-slate-100 gap-2">
                     <div>
                         <h2 class="text-lg font-semibold text-slate-900 flex items-center">
-                            <i class="fa-solid fa-eye text-indigo-600 mr-2"></i> ตัวอย่างลาเบล 80x50mm ล่าสุด (บาร์โค้ดสั้น + วันเวลา)
+                            <i class="fa-solid fa-eye text-indigo-600 mr-2"></i> ตัวอย่างลาเบล 80x50mm ล่าสุด
                         </h2>
                         <p class="text-xs text-slate-500">จำลองสัดส่วนตามขนาดลาเบลจริงสำหรับเครื่องพิมพ์ความร้อน</p>
                     </div>
                     <button id="btn-print-selected" type="button" class="no-print bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium py-2 px-3.5 rounded-xl transition-all flex items-center space-x-1.5 shadow-sm">
                         <i class="fa-solid fa-print"></i>
-                        <span>ส่งพิมพ์รายการล่าสุดนี้</span>
+                        <span>พิมพ์รายการล่าสุดนี้</span>
                     </button>
                 </div>
 
@@ -283,7 +280,6 @@
 
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
-    <!-- Confirm Modal Dialog -->
     <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
         <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl border border-slate-200">
             <h3 id="modal-title" class="text-base font-bold text-slate-900 mb-2">ยืนยันการทำรายการ</h3>
@@ -301,7 +297,7 @@
         import { getFirestore, doc, getDoc, setDoc, deleteDoc, onSnapshot, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // =========================================================================
-        // ค่า Firebase Config ของคุณ (ใส่ข้อมูลจริงของคุณตรงนี้)
+        // ค่า Firebase Config ของคุณ
         // =========================================================================
         const firebaseConfig = {
   apiKey: "AIzaSyBJszkGKbDxZfmgs99_UHKLl4dkpDj69VM",
@@ -413,7 +409,7 @@
 
             itemsToRender.forEach((item, index) => {
                 const labelCard = document.createElement('div');
-                labelCard.className = 'label-item bg-white border border-slate-300 rounded-xl p-2.5 flex flex-col items-center justify-center shadow-sm relative group w-full';
+                labelCard.className = 'label-item bg-white border border-slate-300 rounded-xl p-3 flex flex-col items-center justify-center shadow-sm relative group w-full';
                 
                 labelCard.innerHTML = `
                     <div class="absolute top-1 right-2 text-[9px] text-slate-400 no-print">#${index + 1} (80x50mm)</div>
@@ -421,7 +417,7 @@
                         <svg class="barcode-svg" data-code="${item.code}"></svg>
                     </div>
                     <div class="mt-0.5 text-center">
-                        <span class="text-base font-bold tracking-wider font-mono text-slate-900">${item.code}</span>
+                        <span class="text-lg font-bold tracking-wider font-mono text-slate-900">${item.code}</span>
                     </div>
                     <div class="text-[10px] text-slate-600 font-mono mt-0.5">${item.timestamp}</div>
                 `;
@@ -433,8 +429,8 @@
                 try {
                     JsBarcode(svg, codeText, {
                         format: "CODE128",
-                        width: 1.0,
-                        height: 24,
+                        width: 1.2,
+                        height: 32,
                         displayValue: false,
                         margin: 1
                     });
@@ -496,9 +492,8 @@
 
         async function initFirebase() {
             try {
-                // Check if running on local file protocol
                 if (window.location.protocol === 'file:') {
-                    throw new Error("Local file protocol (file://) detected. Firebase ES modules require HTTP/HTTPS (use GitHub Pages, Netlify, or a local server).");
+                    throw new Error("Local file protocol detected.");
                 }
 
                 app = initializeApp(firebaseConfig);
@@ -515,8 +510,8 @@
                 
                 startRealtimeListeners();
             } catch (err) {
-                console.warn("Cloud Connection Warning / Fallback:", err.message);
-                handleCloudError("สลับใช้โหมดบันทึกในเครื่อง (Offline Mode)");
+                console.warn("Cloud fallback:", err.message);
+                handleCloudError("โหมดบันทึกในเครื่อง (Offline Mode)");
             }
         }
 
@@ -544,9 +539,7 @@
                     setDoc(counterDocRef, { FZAGW: 1200, FZQC: 1081 }).catch(e => console.error(e));
                 }
                 updateUIStatus();
-            }, (error) => {
-                console.error("Counters listener error:", error);
-            });
+            }, (error) => console.error(error));
 
             onSnapshot(historyCollRef, (snapshot) => {
                 const loadedHistory = [];
@@ -558,11 +551,10 @@
                 renderHistoryTable();
                 if (history.length > 0 && lastGeneratedBatch.length === 0) {
                     const recent = [...history].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0, 10);
+                    lastGeneratedBatch = recent;
                     renderPreview(recent);
                 }
-            }, (error) => {
-                console.error("History listener error:", error);
-            });
+            }, (error) => console.error(error));
         }
 
         function loadLocalFallback() {
@@ -571,7 +563,8 @@
             updateUIStatus();
             renderHistoryTable();
             if (history.length > 0) {
-                renderPreview(history.slice(-10));
+                lastGeneratedBatch = history.slice(-10);
+                renderPreview(lastGeneratedBatch);
             }
         }
 
@@ -631,11 +624,11 @@
 
                     lastGeneratedBatch = newItems;
                     renderPreview(lastGeneratedBatch);
-                    showToast(`สร้างเลข Pallet สำเร็จ ${newItems.length} รายการ (ซิงค์ Cloud แล้ว)`, 'success');
+                    showToast(`สร้างเลข Pallet สำเร็จ ${newItems.length} รายการ`, 'success');
                     return;
 
                 } catch (err) {
-                    console.error("Cloud save error:", err);
+                    console.error(err);
                     showToast('เกิดข้อผิดพลาดในการบันทึก Cloud', 'error');
                 }
             }
@@ -679,16 +672,19 @@
             updateUIStatus();
             renderPreview(lastGeneratedBatch);
             renderHistoryTable();
-            showToast(`สร้างเลข Pallet สำเร็จจำนวน ${newItems.length} รายการ (โหมดเครื่อง)`, 'success');
+            showToast(`สร้างเลข Pallet สำเร็จจำนวน ${newItems.length} รายการ`, 'success');
         });
 
         btnPrintSelected.addEventListener('click', function() {
-            if (lastGeneratedBatch.length === 0) {
-                showToast('ไม่มีรายการล่าสุดสำหรับพิมพ์', 'error');
+            if (history.length === 0 && lastGeneratedBatch.length === 0) {
+                showToast('ไม่มีรายการสำหรับพิมพ์', 'error');
                 return;
             }
-            renderPreview([lastGeneratedBatch[0]]);
-            setTimeout(() => window.print(), 200);
+            if (lastGeneratedBatch.length === 0) {
+                lastGeneratedBatch = [history[history.length - 1]];
+            }
+            renderPreview([lastGeneratedBatch[lastGeneratedBatch.length - 1]]);
+            setTimeout(() => window.print(), 300);
         });
 
         btnPrintAll.addEventListener('click', function() {
@@ -698,14 +694,14 @@
             }
             const sorted = [...history].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
             renderPreview([sorted[0]]);
-            setTimeout(() => window.print(), 200);
+            setTimeout(() => window.print(), 300);
         });
 
         window.printSingleLabel = function(code) {
             const item = history.find(h => h.code === code);
             if (item) {
                 renderPreview([item]);
-                setTimeout(() => window.print(), 200);
+                setTimeout(() => window.print(), 300);
             }
         };
 
@@ -719,7 +715,7 @@
                         showToast('ลบรายการสำเร็จ', 'success');
                         return;
                     } catch (err) {
-                        console.error("Cloud delete error:", err);
+                        console.error(err);
                     }
                 }
                 history = history.filter(item => item.id !== idOrDocId && item.docId !== idOrDocId);
