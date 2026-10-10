@@ -54,17 +54,16 @@
         <!-- Left Panel: Form & Counters -->
         <div class="lg:col-span-1 space-y-6 no-print">
             
-            <!-- Print Tips Card -->
-            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-900 text-xs shadow-sm">
-                <h4 class="font-bold flex items-center mb-1 text-amber-900 text-sm">
-                    <i class="fa-solid fa-circle-info mr-1.5 text-amber-600"></i> คำแนะนำการพิมพ์บน Google Sites
+            <!-- Google Sites Print Bypass Banner -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-emerald-900 text-xs shadow-sm">
+                <h4 class="font-bold flex items-center mb-1.5 text-emerald-900 text-sm">
+                    <i class="fa-solid fa-print mr-1.5 text-emerald-600"></i> แก้ปัญหาพิมพ์ไม่ออกบน Google Sites
                 </h4>
-                <p class="mb-1">ระบบใช้หน้าต่างพิมพ์พิเศษเพื่อรองรับ Iframe:</p>
-                <ul class="list-disc pl-4 space-y-0.5 text-amber-800">
-                    <li><b>Paper Size (ขนาดกระดาษ):</b> เลือก 80mm x 50mm</li>
-                    <li><b>Margins (ระยะขอบ):</b> เลือก <b>None (ไม่มี)</b></li>
-                    <li>หากหน้าต่างพิมพ์ไม่ขึ้น ให้ตรวจสอบการบล็อก Pop-up ของเบราว์เซอร์</li>
-                </ul>
+                <p class="mb-2">หากปุ่มพิมพ์ปกติถูกบล็อกโดยกรอบ Iframe ให้ใช้ปุ่มด้านล่างนี้เพื่อเปิดหน้าต่างพิมพ์แยกเต็มจอ:</p>
+                <button id="btn-open-print-window" type="button" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-3 rounded-xl shadow-sm transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-external-link-alt"></i>
+                    <span>เปิดหน้าต่างพิมพ์พิเศษ (แนะนำสำหรับ Google Sites)</span>
+                </button>
             </div>
 
             <!-- Generator Form Card -->
@@ -243,7 +242,7 @@
         import { getFirestore, doc, getDoc, setDoc, deleteDoc, onSnapshot, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // =========================================================================
-        // ค่า Firebase Config ของคุณ
+        // ค่า Firebase Config ของคุณ (ใส่ครบถ้วนแล้ว)
         // =========================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyBJszkGKbDxZfmgs99_UHKLl4dkpDj69VM",
@@ -277,6 +276,7 @@
         const btnClearHistory = document.getElementById('btn-clear-history');
         const btnPrintSelected = document.getElementById('btn-print-selected');
         const btnPrintAll = document.getElementById('btn-print-all');
+        const btnOpenPrintWindow = document.getElementById('btn-open-print-window');
         const toastContainer = document.getElementById('toast-container');
         const cloudStatusText = document.getElementById('cloud-status-text');
         const cloudDot = document.getElementById('cloud-dot');
@@ -395,7 +395,7 @@
 
             const printWin = window.open('', '_blank', 'width=500,height=700');
             if (!printWin) {
-                showToast('เบราว์เซอร์บล็อกหน้าต่าง Pop-up กรุณาอนุญาต Pop-up บน Google Sites', 'error');
+                showToast('เบราว์เซอร์บล็อกหน้าต่าง Pop-up กรุณาอนุญาต Pop-up หรือใช้ปุ่มเปิดหน้าต่างพิมพ์พิเศษ', 'error');
                 return;
             }
 
@@ -756,6 +756,11 @@
             }
             const sorted = [...history].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
             triggerPrintPopup(sorted);
+        });
+
+        // Open full page app in new tab for Google Sites printing bypass
+        btnOpenPrintWindow.addEventListener('click', function() {
+            window.open(window.location.href, '_blank');
         });
 
         window.printSingleLabel = function(code) {
